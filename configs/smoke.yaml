@@ -1,0 +1,60 @@
+# Fast, end-to-end pipeline used by default for `make all`.
+#
+# Uses a tiny synthetic dataset generated locally (no downloads) and
+# short training so the pipeline is runnable on CPU.
+
+run_name: smoke
+seed: 123
+
+paths:
+  work_dir: .
+  data_dir: data
+  checkpoints_dir: checkpoints
+
+data:
+  dataset: toy
+  toy:
+    num_passages: 200
+    num_queries_train: 64
+    num_queries_dev: 32
+    positives_per_query: 1
+
+model:
+  # Tiny model to keep `make all` fast.
+  hf_model_name: hf-internal-testing/tiny-random-bert
+  pooling: mean
+  projection_dim: 768
+  l2_normalize: true
+
+train:
+  device: auto
+  batch_size: 16
+  epochs: 1
+  max_steps: 25
+  lr: 2.0e-5
+  weight_decay: 0.01
+  max_length_query: 32
+  max_length_passage: 64
+  fp16: false
+  deterministic: true
+  deterministic_warn_only: true
+  log_every: 5
+  save_every: 25
+
+experiments:
+  dense_baseline:
+    use_matryoshka: false
+    matryoshka_dims: [768]
+    temperature: 0.05
+  matryoshka:
+    use_matryoshka: true
+    matryoshka_dims: [768, 384, 192, 96]
+    temperature: 0.05
+
+eval:
+  dims: [768, 384, 192, 96]
+  topk: [10, 50, 100]
+  max_queries: null
+  use_faiss_if_available: false
+  bm25:
+    enabled: true

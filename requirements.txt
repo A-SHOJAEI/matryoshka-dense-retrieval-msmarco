@@ -1,0 +1,14 @@
+# Core runtime
+numpy==1.26.4
+PyYAML==6.0.1
+requests==2.31.0
+tqdm==4.66.4
+
+# Modeling / training
+torch==2.2.2
+transformers==4.40.2
+tokenizers==0.19.1
+
+# Baseline BM25 for smoke + small corpora (pure Python)
+rank-bm25==0.2.2
+

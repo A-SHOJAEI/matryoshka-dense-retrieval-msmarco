@@ -1,0 +1,191 @@
+{
+  "dataset": "msmarco",
+  "dims": [
+    768,
+    384,
+    192,
+    96
+  ],
+  "environment": {
+    "cuda_available": true,
+    "platform": "Linux-6.17.0-14-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "torch": "2.10.0+cu128",
+    "transformers": "5.1.0"
+  },
+  "experiments": {
+    "dense_baseline": {
+      "checkpoint": "checkpoints/msmarco/dense_baseline",
+      "evaluation_mode": "candidate_rerank",
+      "meta": {
+        "experiment": "dense_baseline",
+        "loss": {
+          "dims": [
+            768
+          ],
+          "temperature": 0.05,
+          "use_matryoshka": false
+        },
+        "model": {
+          "hf_model_name": "bert-base-uncased",
+          "l2_normalize": true,
+          "pooling": "mean",
+          "projection_dim": 768
+        },
+        "run_name": "msmarco",
+        "seed": 123
+      },
+      "per_dim": {
+        "192": {
+          "latency": {
+            "encode_passages_s": 2033.7602926139953,
+            "encode_queries_s": 0.590820061013801,
+            "search_avg_ms_per_query": 0.3288607540598605,
+            "search_total_s": 0.3288607540598605
+          },
+          "metrics": {
+            "mrr_10": 0.21560198412698411,
+            "ndcg_10": 0.2704502858817958,
+            "recall_100": 0.711,
+            "recall_1000": 0.794,
+            "recall_50": 0.659
+          }
+        },
+        "384": {
+          "latency": {
+            "encode_passages_s": 2033.7602926139953,
+            "encode_queries_s": 0.590820061013801,
+            "search_avg_ms_per_query": 0.5422872677154373,
+            "search_total_s": 0.5422872677154373
+          },
+          "metrics": {
+            "mrr_10": 0.21674404761904761,
+            "ndcg_10": 0.27089746345191684,
+            "recall_100": 0.713,
+            "recall_1000": 0.794,
+            "recall_50": 0.669
+          }
+        },
+        "768": {
+          "latency": {
+            "encode_passages_s": 2033.7602926139953,
+            "encode_queries_s": 0.590820061013801,
+            "search_avg_ms_per_query": 2.9938508218619972,
+            "search_total_s": 2.9938508218619972
+          },
+          "metrics": {
+            "mrr_10": 0.2177035714285714,
+            "ndcg_10": 0.27271959930796824,
+            "recall_100": 0.715,
+            "recall_1000": 0.794,
+            "recall_50": 0.672
+          }
+        },
+        "96": {
+          "latency": {
+            "encode_passages_s": 2033.7602926139953,
+            "encode_queries_s": 0.590820061013801,
+            "search_avg_ms_per_query": 0.24655835091834888,
+            "search_total_s": 0.24655835091834888
+          },
+          "metrics": {
+            "mrr_10": 0.2001484126984127,
+            "ndcg_10": 0.25444499117723884,
+            "recall_100": 0.697,
+            "recall_1000": 0.794,
+            "recall_50": 0.646
+          }
+        }
+      }
+    },
+    "matryoshka": {
+      "checkpoint": "checkpoints/msmarco/matryoshka",
+      "evaluation_mode": "candidate_rerank",
+      "meta": {
+        "experiment": "matryoshka",
+        "loss": {
+          "dims": [
+            768,
+            384,
+            192,
+            96
+          ],
+          "temperature": 0.05,
+          "use_matryoshka": true
+        },
+        "model": {
+          "hf_model_name": "bert-base-uncased",
+          "l2_normalize": true,
+          "pooling": "mean",
+          "projection_dim": 768
+        },
+        "run_name": "msmarco",
+        "seed": 123
+      },
+      "per_dim": {
+        "192": {
+          "latency": {
+            "encode_passages_s": 2050.7690729479946,
+            "encode_queries_s": 0.33494319100282155,
+            "search_avg_ms_per_query": 0.3288746746547986,
+            "search_total_s": 0.3288746746547986
+          },
+          "metrics": {
+            "mrr_10": 0.21415515873015872,
+            "ndcg_10": 0.26778917384535333,
+            "recall_100": 0.712,
+            "recall_1000": 0.794,
+            "recall_50": 0.663
+          }
+        },
+        "384": {
+          "latency": {
+            "encode_passages_s": 2050.7690729479946,
+            "encode_queries_s": 0.33494319100282155,
+            "search_avg_ms_per_query": 0.5414034273999278,
+            "search_total_s": 0.5414034273999278
+          },
+          "metrics": {
+            "mrr_10": 0.2128095238095238,
+            "ndcg_10": 0.26866525810035397,
+            "recall_100": 0.709,
+            "recall_1000": 0.794,
+            "recall_50": 0.661
+          }
+        },
+        "768": {
+          "latency": {
+            "encode_passages_s": 2050.7690729479946,
+            "encode_queries_s": 0.33494319100282155,
+            "search_avg_ms_per_query": 2.412018858769443,
+            "search_total_s": 2.412018858769443
+          },
+          "metrics": {
+            "mrr_10": 0.213465873015873,
+            "ndcg_10": 0.26917755354699685,
+            "recall_100": 0.708,
+            "recall_1000": 0.794,
+            "recall_50": 0.665
+          }
+        },
+        "96": {
+          "latency": {
+            "encode_passages_s": 2050.7690729479946,
+            "encode_queries_s": 0.33494319100282155,
+            "search_avg_ms_per_query": 0.24629544164054099,
+            "search_total_s": 0.24629544164054096
+          },
+          "metrics": {
+            "mrr_10": 0.20635039682539683,
+            "ndcg_10": 0.25965103130819694,
+            "recall_100": 0.712,
+            "recall_1000": 0.794,
+            "recall_50": 0.656
+          }
+        }
+      }
+    }
+  },
+  "run_name": "msmarco",
+  "timestamp_unix": 1771322691
+}

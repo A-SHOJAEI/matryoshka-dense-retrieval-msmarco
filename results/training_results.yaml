@@ -1,0 +1,229 @@
+{
+  "config": "configs/smoke.yaml",
+  "experiments": [
+    "dense_baseline",
+    "matryoshka"
+  ],
+  "test_metrics": {
+    "dataset": "toy",
+    "dims": [
+      768,
+      384,
+      192,
+      96
+    ],
+    "environment": {
+      "cuda_available": true,
+      "platform": "Linux-6.17.0-14-generic-x86_64-with-glibc2.39",
+      "python": "3.12.3",
+      "torch": "2.10.0+cu128",
+      "transformers": "5.1.0"
+    },
+    "experiments": {
+      "bm25": {
+        "metrics": {
+          "mrr_10": 0.14559771825396825,
+          "ndcg_10": 0.2257396992073449,
+          "recall_100": 1.0,
+          "recall_1000": 1.0,
+          "recall_50": 1.0
+        }
+      },
+      "dense_baseline": {
+        "checkpoint": "checkpoints/smoke/dense_baseline",
+        "meta": {
+          "experiment": "dense_baseline",
+          "loss": {
+            "dims": [
+              768
+            ],
+            "temperature": 0.05,
+            "use_matryoshka": false
+          },
+          "model": {
+            "hf_model_name": "hf-internal-testing/tiny-random-bert",
+            "l2_normalize": true,
+            "pooling": "mean",
+            "projection_dim": 768
+          },
+          "run_name": "smoke",
+          "seed": 123
+        },
+        "per_dim": {
+          "192": {
+            "latency": {
+              "encode_passages_s": 0.21850927000195952,
+              "encode_queries_s": 0.03534024399777991,
+              "search_avg_ms_per_query": 0.01804081250611489,
+              "search_total_s": 0.0005773060001956765
+            },
+            "memory": {
+              "passage_matrix_bytes": 153600
+            },
+            "metrics": {
+              "mrr_10": 0.1046875,
+              "ndcg_10": 0.13146494765846126,
+              "recall_100": 0.84375,
+              "recall_1000": 1.0,
+              "recall_50": 0.8125
+            }
+          },
+          "384": {
+            "latency": {
+              "encode_passages_s": 0.21850927000195952,
+              "encode_queries_s": 0.03534024399777991,
+              "search_avg_ms_per_query": 0.020230531163178966,
+              "search_total_s": 0.0006473769972217269
+            },
+            "memory": {
+              "passage_matrix_bytes": 307200
+            },
+            "metrics": {
+              "mrr_10": 0.10130208333333333,
+              "ndcg_10": 0.12875409946166072,
+              "recall_100": 0.84375,
+              "recall_1000": 1.0,
+              "recall_50": 0.78125
+            }
+          },
+          "768": {
+            "latency": {
+              "encode_passages_s": 0.21850927000195952,
+              "encode_queries_s": 0.03534024399777991,
+              "search_avg_ms_per_query": 0.02823106251526042,
+              "search_total_s": 0.0009033940004883334
+            },
+            "memory": {
+              "passage_matrix_bytes": 614400
+            },
+            "metrics": {
+              "mrr_10": 0.10026041666666667,
+              "ndcg_10": 0.12779642383270698,
+              "recall_100": 0.84375,
+              "recall_1000": 1.0,
+              "recall_50": 0.78125
+            }
+          },
+          "96": {
+            "latency": {
+              "encode_passages_s": 0.21850927000195952,
+              "encode_queries_s": 0.03534024399777991,
+              "search_avg_ms_per_query": 0.01723318757740344,
+              "search_total_s": 0.0005514620024769101
+            },
+            "memory": {
+              "passage_matrix_bytes": 76800
+            },
+            "metrics": {
+              "mrr_10": 0.0920138888888889,
+              "ndcg_10": 0.11444947224408647,
+              "recall_100": 0.84375,
+              "recall_1000": 1.0,
+              "recall_50": 0.6875
+            }
+          }
+        }
+      },
+      "matryoshka": {
+        "checkpoint": "checkpoints/smoke/matryoshka",
+        "meta": {
+          "experiment": "matryoshka",
+          "loss": {
+            "dims": [
+              768,
+              384,
+              192,
+              96
+            ],
+            "temperature": 0.05,
+            "use_matryoshka": true
+          },
+          "model": {
+            "hf_model_name": "hf-internal-testing/tiny-random-bert",
+            "l2_normalize": true,
+            "pooling": "mean",
+            "projection_dim": 768
+          },
+          "run_name": "smoke",
+          "seed": 123
+        },
+        "per_dim": {
+          "192": {
+            "latency": {
+              "encode_passages_s": 0.0454031320005015,
+              "encode_queries_s": 0.0053410569998959545,
+              "search_avg_ms_per_query": 0.01822809372242773,
+              "search_total_s": 0.0005832989991176873
+            },
+            "memory": {
+              "passage_matrix_bytes": 153600
+            },
+            "metrics": {
+              "mrr_10": 0.10989583333333333,
+              "ndcg_10": 0.1355565024575693,
+              "recall_100": 0.84375,
+              "recall_1000": 1.0,
+              "recall_50": 0.8125
+            }
+          },
+          "384": {
+            "latency": {
+              "encode_passages_s": 0.0454031320005015,
+              "encode_queries_s": 0.0053410569998959545,
+              "search_avg_ms_per_query": 0.020933593646077497,
+              "search_total_s": 0.0006698749966744799
+            },
+            "memory": {
+              "passage_matrix_bytes": 307200
+            },
+            "metrics": {
+              "mrr_10": 0.10130208333333333,
+              "ndcg_10": 0.12875409946166072,
+              "recall_100": 0.84375,
+              "recall_1000": 1.0,
+              "recall_50": 0.78125
+            }
+          },
+          "768": {
+            "latency": {
+              "encode_passages_s": 0.0454031320005015,
+              "encode_queries_s": 0.0053410569998959545,
+              "search_avg_ms_per_query": 0.027456750331111834,
+              "search_total_s": 0.0008786160105955787
+            },
+            "memory": {
+              "passage_matrix_bytes": 614400
+            },
+            "metrics": {
+              "mrr_10": 0.10026041666666667,
+              "ndcg_10": 0.12779642383270698,
+              "recall_100": 0.84375,
+              "recall_1000": 1.0,
+              "recall_50": 0.78125
+            }
+          },
+          "96": {
+            "latency": {
+              "encode_passages_s": 0.0454031320005015,
+              "encode_queries_s": 0.0053410569998959545,
+              "search_avg_ms_per_query": 0.017229156242137833,
+              "search_total_s": 0.0005513329997484107
+            },
+            "memory": {
+              "passage_matrix_bytes": 76800
+            },
+            "metrics": {
+              "mrr_10": 0.0920138888888889,
+              "ndcg_10": 0.11444947224408647,
+              "recall_100": 0.84375,
+              "recall_1000": 1.0,
+              "recall_50": 0.6875
+            }
+          }
+        }
+      }
+    },
+    "run_name": "smoke",
+    "timestamp_unix": 1771017862
+  }
+}
