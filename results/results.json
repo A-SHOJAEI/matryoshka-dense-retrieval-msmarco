@@ -1,0 +1,116 @@
+{
+  "msmarco_evaluation": {
+    "dataset": "msmarco",
+    "evaluation_mode": "candidate_rerank",
+    "model": "bert-base-uncased",
+    "projection_dim": 768,
+    "pooling": "mean",
+    "l2_normalize": true,
+    "dense_baseline": {
+      "dim_768": {
+        "mrr_10": 0.2177,
+        "ndcg_10": 0.2727,
+        "recall_50": 0.672,
+        "recall_100": 0.715,
+        "recall_1000": 0.794,
+        "search_ms_per_query": 2.994
+      },
+      "dim_384": {
+        "mrr_10": 0.2167,
+        "ndcg_10": 0.2709,
+        "recall_50": 0.669,
+        "recall_100": 0.713,
+        "recall_1000": 0.794,
+        "search_ms_per_query": 0.542
+      },
+      "dim_192": {
+        "mrr_10": 0.2156,
+        "ndcg_10": 0.2705,
+        "recall_50": 0.659,
+        "recall_100": 0.711,
+        "recall_1000": 0.794,
+        "search_ms_per_query": 0.329
+      },
+      "dim_96": {
+        "mrr_10": 0.2001,
+        "ndcg_10": 0.2544,
+        "recall_50": 0.646,
+        "recall_100": 0.697,
+        "recall_1000": 0.794,
+        "search_ms_per_query": 0.247
+      }
+    },
+    "matryoshka": {
+      "dim_768": {
+        "mrr_10": 0.2135,
+        "ndcg_10": 0.2692,
+        "recall_50": 0.665,
+        "recall_100": 0.708,
+        "recall_1000": 0.794,
+        "search_ms_per_query": 2.412
+      },
+      "dim_384": {
+        "mrr_10": 0.2128,
+        "ndcg_10": 0.2687,
+        "recall_50": 0.661,
+        "recall_100": 0.709,
+        "recall_1000": 0.794,
+        "search_ms_per_query": 0.541
+      },
+      "dim_192": {
+        "mrr_10": 0.2142,
+        "ndcg_10": 0.2678,
+        "recall_50": 0.663,
+        "recall_100": 0.712,
+        "recall_1000": 0.794,
+        "search_ms_per_query": 0.329
+      },
+      "dim_96": {
+        "mrr_10": 0.2064,
+        "ndcg_10": 0.2597,
+        "recall_50": 0.656,
+        "recall_100": 0.712,
+        "recall_1000": 0.794,
+        "search_ms_per_query": 0.246
+      }
+    }
+  },
+  "smoke_evaluation": {
+    "dataset": "toy",
+    "model": "hf-internal-testing/tiny-random-bert",
+    "bm25_baseline": {
+      "mrr_10": 0.1456,
+      "ndcg_10": 0.2257,
+      "recall_50": 1.0,
+      "recall_100": 1.0,
+      "recall_1000": 1.0
+    },
+    "dense_baseline": {
+      "dim_768": {"mrr_10": 0.1003, "ndcg_10": 0.1278, "recall_50": 0.7812, "recall_100": 0.8438, "recall_1000": 1.0},
+      "dim_384": {"mrr_10": 0.1013, "ndcg_10": 0.1288, "recall_50": 0.7812, "recall_100": 0.8438, "recall_1000": 1.0},
+      "dim_192": {"mrr_10": 0.1047, "ndcg_10": 0.1315, "recall_50": 0.8125, "recall_100": 0.8438, "recall_1000": 1.0},
+      "dim_96": {"mrr_10": 0.0920, "ndcg_10": 0.1144, "recall_50": 0.6875, "recall_100": 0.8438, "recall_1000": 1.0}
+    },
+    "matryoshka": {
+      "dim_768": {"mrr_10": 0.1003, "ndcg_10": 0.1278, "recall_50": 0.7812, "recall_100": 0.8438, "recall_1000": 1.0},
+      "dim_384": {"mrr_10": 0.1013, "ndcg_10": 0.1288, "recall_50": 0.7812, "recall_100": 0.8438, "recall_1000": 1.0},
+      "dim_192": {"mrr_10": 0.1099, "ndcg_10": 0.1356, "recall_50": 0.8125, "recall_100": 0.8438, "recall_1000": 1.0},
+      "dim_96": {"mrr_10": 0.0920, "ndcg_10": 0.1144, "recall_50": 0.6875, "recall_100": 0.8438, "recall_1000": 1.0}
+    }
+  },
+  "environment": {
+    "cuda_available": true,
+    "platform": "Linux-6.17.0-14-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "torch": "2.10.0+cu128",
+    "transformers": "5.1.0"
+  },
+  "training_config": {
+    "batch_size": 16,
+    "max_steps": 25,
+    "learning_rate": 2e-5,
+    "weight_decay": 0.01,
+    "temperature": 0.05,
+    "seed": 123
+  }
+}

@@ -1,6 +1,4 @@
-data/raw/
-data/processed/
-checkpoints/
+data/
 __pycache__/
 *.pyc
 *.log
@@ -9,8 +7,12 @@ mlruns/
 .venv/
 venv/
 runs/
-*.pt
-*.pth
+checkpoints/*.pth
+checkpoints/**/*.pt
+checkpoints/**/*.pth
 *.pkl
 *.safetensors
 *.egg-info/
+
+# Include results
+!results/
