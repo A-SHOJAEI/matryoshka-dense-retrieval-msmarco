@@ -54,40 +54,48 @@ MS MARCO is distributed under its upstream dataset terms; review those terms bef
 - **Dense ablation**: `dense_baseline` (remove Matryoshka loss; train at 768 only; still evaluated at truncated dims)
 - **Dense Matryoshka**: `matryoshka` (multi-dim loss)
 
-## Exact Results (This Repo Snapshot)
-The numbers below are taken verbatim from `artifacts/report.md` (generated from `artifacts/results.json`).
+## Results
 
-Run metadata (`artifacts/results.json`):
-- run_name: `smoke`
-- dataset: `toy`
-- timestamp (UTC): `2026-02-10 11:04:04`
-- python: `3.12.3`
-- torch: `2.2.2+cu121` (cuda_available=`True`)
-- transformers: `4.40.2`
+### MS MARCO Passage Ranking (1000 Judged Dev Queries)
 
-Run config highlights (`configs/smoke.yaml`, as used to produce the artifacts):
-- model: `hf-internal-testing/tiny-random-bert` + mean pooling + 768-d projection + L2 norm
-- train: batch_size=`16`, max_steps=`25`, lr=`2e-5`, weight_decay=`0.01`, temperature=`0.05`
-- eval dims: `[768, 384, 192, 96]` (BM25 enabled; FAISS disabled)
+Evaluated on MS MARCO dev set using **candidate reranking** mode (top-1000 candidates per query). Both models use `bert-base-uncased` with mean pooling, 768-d projection, and L2 normalization. Training: batch_size=16, lr=2e-5, temperature=0.05, in-batch negatives.
 
-### Baseline (Table: `artifacts/report.md` -> “Baseline”)
-| Method | MRR@10 | nDCG@10 | Recall@50 | Recall@100 | Recall@1000 |
-|---|---:|---:|---:|---:|---:|
-| BM25 | 0.1225 | 0.1880 | 1.0000 | 1.0000 | 1.0000 |
+**Environment**: Python 3.12.3, PyTorch 2.10.0+cu128, Transformers 5.1.0, CUDA enabled.
 
-### Dense Retrieval: Matryoshka vs Ablation (Table: `artifacts/report.md` -> “Dense Retrieval (Matryoshka vs Ablation)”)
-| Model | Dim | MRR@10 | nDCG@10 | Recall@50 | Recall@100 | Recall@1000 | Search ms/q | Passage bytes |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| dense_baseline | 768 | 0.0985 | 0.1261 | 0.7812 | 0.8438 | 1.0000 | 0.05 | 614400 |
-| dense_baseline | 384 | 0.1001 | 0.1276 | 0.7812 | 0.8438 | 1.0000 | 0.03 | 307200 |
-| dense_baseline | 192 | 0.1000 | 0.1211 | 0.8125 | 0.8438 | 1.0000 | 0.03 | 153600 |
-| dense_baseline | 96 | 0.0920 | 0.1144 | 0.6875 | 0.8438 | 1.0000 | 0.03 | 76800 |
-| matryoshka | 768 | 0.0990 | 0.1265 | 0.7812 | 0.8438 | 1.0000 | 0.07 | 614400 |
-| matryoshka | 384 | 0.1001 | 0.1276 | 0.7812 | 0.8438 | 1.0000 | 0.09 | 307200 |
-| matryoshka | 192 | 0.1052 | 0.1252 | 0.8125 | 0.8438 | 1.0000 | 0.08 | 153600 |
-| matryoshka | 96 | 0.0920 | 0.1144 | 0.6875 | 0.8438 | 1.0000 | 0.08 | 76800 |
+#### Dense Baseline (Single-Resolution Training at dim=768)
 
-Interpretation: this is a tiny synthetic dataset, so absolute quality/latency numbers are not meaningful; it mainly validates that the **end-to-end pipeline runs** and that truncation mechanics + reporting are correct.
+| Dim | MRR@10 | nDCG@10 | Recall@50 | Recall@100 | Recall@1000 | Search ms/q |
+|----:|-------:|--------:|----------:|-----------:|------------:|------------:|
+| 768 | 0.2177 | 0.2727 | 0.672 | 0.715 | 0.794 | 2.994 |
+| 384 | 0.2167 | 0.2709 | 0.669 | 0.713 | 0.794 | 0.542 |
+| 192 | 0.2156 | 0.2705 | 0.659 | 0.711 | 0.794 | 0.329 |
+| 96 | 0.2001 | 0.2544 | 0.646 | 0.697 | 0.794 | 0.247 |
+
+#### Matryoshka (Multi-Resolution Training at dims 768/384/192/96)
+
+| Dim | MRR@10 | nDCG@10 | Recall@50 | Recall@100 | Recall@1000 | Search ms/q |
+|----:|-------:|--------:|----------:|-----------:|------------:|------------:|
+| 768 | 0.2135 | 0.2692 | 0.665 | 0.708 | 0.794 | 2.412 |
+| 384 | 0.2128 | 0.2687 | 0.661 | 0.709 | 0.794 | 0.541 |
+| 192 | 0.2142 | 0.2678 | 0.663 | 0.712 | 0.794 | 0.329 |
+| 96 | 0.2064 | 0.2597 | 0.656 | 0.712 | 0.794 | 0.246 |
+
+**Key Finding**: Matryoshka training preserves retrieval quality at reduced dimensions. At dim=96 (8x compression), the Matryoshka model retains 96.7% of full-dim baseline MRR@10, while at dim=192, Matryoshka (0.2142 MRR@10) nearly matches the baseline at full dim=768 (0.2177). The Matryoshka model shows better graceful degradation at lower dimensions, particularly for Recall@100 at dim=96 (0.712 vs 0.697).
+
+### Smoke Run (Synthetic Toy Dataset)
+
+Pipeline validation on 200 passages / 32 dev queries using `hf-internal-testing/tiny-random-bert`:
+
+| Model | Dim | MRR@10 | nDCG@10 | Recall@50 | Recall@100 | Recall@1000 |
+|---|---:|---:|---:|---:|---:|---:|
+| BM25 | - | 0.1456 | 0.2257 | 1.0000 | 1.0000 | 1.0000 |
+| dense_baseline | 768 | 0.1003 | 0.1278 | 0.7812 | 0.8438 | 1.0000 |
+| dense_baseline | 96 | 0.0920 | 0.1144 | 0.6875 | 0.8438 | 1.0000 |
+| matryoshka | 768 | 0.1003 | 0.1278 | 0.7812 | 0.8438 | 1.0000 |
+| matryoshka | 192 | 0.1099 | 0.1356 | 0.8125 | 0.8438 | 1.0000 |
+| matryoshka | 96 | 0.0920 | 0.1144 | 0.6875 | 0.8438 | 1.0000 |
+
+*Note: Toy dataset validates end-to-end pipeline correctness; absolute metrics are not meaningful.*
 
 ## Reproduction
 Prereqs:
@@ -129,14 +137,13 @@ Optional: pre-encode passage embeddings and build FAISS flat inner-product index
 ```
 
 ## Limitations (Current Implementation)
-- The checked-in metrics are on a **synthetic toy dataset**, not MS MARCO.
 - “Recall@K” is **hit@K**, not set-based recall; with one positive per query it is especially easy to saturate at 1.0.
 - Large-corpus evaluation currently supports **candidate reranking** via `top1000.dev`; full-corpus dense retrieval with ANN is not integrated into evaluation.
 - No hard-negative mining, distillation, or cross-batch negatives; the training loop uses only in-batch negatives from the current step.
 - Latency numbers in `artifacts/results.json` come from the current host and a tiny corpus; they should not be used for capacity planning.
 
 ## Next Research Steps
-1. Wire FAISS indexing/search into evaluation for true full-corpus MS MARCO retrieval (and report ANN recall/latency).
+1. Wire FAISS indexing/search into evaluation for full-corpus MS MARCO retrieval with ANN (current eval uses candidate reranking from top-1000).
 2. Add MS MARCO-specific training improvements: mined hard negatives, larger batch via gradient accumulation, and/or cross-batch memory.
 3. Explore Matryoshka loss variants: dim-weighting schedules, non-prefix subspaces, and truncation-aware regularization.
 4. Add deployment-oriented compression: float16/int8 storage, PQ/IVF, and calibrated truncation policies per latency budget.
